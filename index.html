@@ -1,19 +1,344 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <title>Criançada de Ibirama</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      background-color: #06402B;
-      color: #FFFFFF;
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TransEscolar — Ibiramã</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.6.0/dist/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-primary:#ffffff;--bg-secondary:#f5f5f0;--bg-tertiary:#eeede8;
+  --text-primary:#1a1a18;--text-secondary:#5f5e5a;--text-tertiary:#888780;
+  --border-light:rgba(0,0,0,0.10);--border-mid:rgba(0,0,0,0.18);
+  --green:#1D9E75;--green-dark:#0F6E56;--green-pale:#E1F5EE;--green-text:#085041;
+  --blue-pale:#E6F1FB;--blue-text:#0C447C;
+  --red-pale:#FCEBEB;--red-text:#A32D2D;
+  --gray-pale:#F1EFE8;--gray-text:#5F5E5A;
+  --radius-md:8px;--radius-lg:12px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg-primary:#1e1e1c;--bg-secondary:#272724;--bg-tertiary:#2c2c2a;
+    --text-primary:#f0ede8;--text-secondary:#b4b2a9;--text-tertiary:#888780;
+    --border-light:rgba(255,255,255,0.08);--border-mid:rgba(255,255,255,0.15);
+    --green:#1D9E75;--green-dark:#5DCAA5;--green-pale:#04342C;--green-text:#9FE1CB;
+    --blue-pale:#042C53;--blue-text:#85B7EB;
+    --red-pale:#501313;--red-text:#F09595;
+    --gray-pale:#2C2C2A;--gray-text:#B4B2A9;
+  }
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-tertiary);color:var(--text-primary);min-height:100vh}
+.app{min-height:100vh}
+
+/* LOGIN */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem}
+.login-card{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:380px}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:1.75rem}
+.logo-icon{width:44px;height:44px;background:var(--green);border-radius:11px;display:flex;align-items:center;justify-content:center;color:white;font-size:22px;flex-shrink:0}
+.logo-text{font-size:19px;font-weight:600;color:var(--text-primary)}
+.logo-sub{font-size:12px;color:var(--text-secondary);margin-top:1px}
+.login-tabs{display:flex;gap:4px;background:var(--bg-secondary);border-radius:var(--radius-md);padding:4px;margin-bottom:1.5rem}
+.tab-btn{flex:1;padding:7px;border:none;background:transparent;border-radius:6px;font-size:13px;cursor:pointer;color:var(--text-secondary);transition:all .15s;font-weight:500}
+.tab-btn.active{background:var(--bg-primary);color:var(--text-primary);border:0.5px solid var(--border-light)}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:11px;color:var(--text-secondary);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.field input{width:100%;padding:9px 12px;border:0.5px solid var(--border-mid);border-radius:var(--radius-md);background:var(--bg-primary);color:var(--text-primary);font-size:14px;outline:none;transition:border-color .15s}
+.field input:focus{border-color:var(--green)}
+.btn-primary{width:100%;padding:11px;background:var(--green);border:none;border-radius:var(--radius-md);color:white;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s}
+.btn-primary:hover{background:var(--green-dark)}
+.hint{font-size:11px;color:var(--text-tertiary);margin-top:1rem;text-align:center;line-height:1.6}
+.error-msg{background:var(--red-pale);color:var(--red-text);font-size:12px;padding:8px 12px;border-radius:var(--radius-md);margin-bottom:1rem;text-align:center}
+
+/* TOPBAR */
+.topbar{background:var(--bg-primary);border-bottom:0.5px solid var(--border-light);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.topbar-icon{width:34px;height:34px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:17px}
+.topbar-title{font-size:15px;font-weight:600}
+.topbar-sub{font-size:11px;color:var(--text-secondary)}
+.user-badge{display:flex;align-items:center;gap:8px}
+.role-pill{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
+.role-monitora{background:var(--green-pale);color:var(--green-text)}
+.role-pai{background:var(--blue-pale);color:var(--blue-text)}
+.btn-logout{font-size:12px;padding:5px 11px;border:0.5px solid var(--border-mid);border-radius:var(--radius-md);background:transparent;cursor:pointer;color:var(--text-secondary);transition:all .15s}
+.btn-logout:hover{background:var(--bg-secondary)}
+
+/* CONTENT */
+.content{padding:16px;max-width:720px;margin:0 auto}
+.section-title{font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px}
+.btn-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);background:none;border:none;cursor:pointer;padding:0;margin-bottom:16px;transition:color .1s}
+.btn-back:hover{color:var(--text-primary)}
+
+/* LINHAS */
+.line-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px}
+.line-card{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:16px;cursor:pointer;transition:all .15s}
+.line-card:hover{border-color:var(--green);transform:translateY(-1px)}
+.line-num{font-size:24px;font-weight:700;color:var(--green-dark)}
+.line-name{font-size:12px;color:var(--text-secondary);margin-top:3px}
+.line-meta{font-size:11px;color:var(--text-tertiary);margin-top:8px}
+
+/* ÔNIBUS */
+.bus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:20px}
+.bus-card{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);padding:11px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px}
+.bus-card:hover{border-color:var(--green)}
+.bus-card.selected{border-color:var(--green);border-width:1.5px;background:var(--green-pale)}
+.bus-icon{font-size:20px;color:var(--green-dark)}
+.bus-num{font-size:13px;font-weight:600}
+.bus-info{font-size:11px;color:var(--text-secondary)}
+
+/* CHAMADA */
+.chamada-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chamada-stats{display:flex;gap:6px;flex-wrap:wrap}
+.stat-chip{font-size:12px;padding:4px 10px;border-radius:20px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.stat-present{background:var(--green-pale);color:var(--green-text)}
+.stat-absent{background:var(--red-pale);color:var(--red-text)}
+.stat-pending{background:var(--gray-pale);color:var(--gray-text)}
+
+/* TABELA */
+.children-table{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);overflow:hidden}
+.table-header{display:grid;grid-template-columns:1fr 100px 100px 90px;padding:10px 16px;background:var(--bg-secondary);font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;gap:8px}
+.table-row{display:grid;grid-template-columns:1fr 100px 100px 90px;padding:11px 16px;border-top:0.5px solid var(--border-light);align-items:center;gap:8px;transition:background .1s}
+.table-row:hover{background:var(--bg-secondary)}
+.child-name{font-size:13px;font-weight:600}
+.child-stop{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.descida-pill{font-size:11px;padding:3px 8px;border-radius:20px;background:var(--blue-pale);color:var(--blue-text);font-weight:500;display:inline-block}
+.status-btns{display:flex;gap:5px}
+.status-btn{font-size:13px;width:32px;height:28px;border-radius:var(--radius-md);border:0.5px solid var(--border-light);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--bg-secondary);color:var(--text-secondary)}
+.status-btn:hover{transform:scale(1.05)}
+.status-btn.active-present{background:var(--green-pale);color:var(--green-text);border-color:var(--green)}
+.status-btn.active-absent{background:var(--red-pale);color:var(--red-text);border-color:#E24B4A}
+
+/* PAI */
+.pai-card{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:1.25rem}
+.pai-header{display:flex;align-items:center;gap:14px;margin-bottom:1rem;padding-bottom:1rem;border-bottom:0.5px solid var(--border-light)}
+.avatar{width:48px;height:48px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:var(--green-dark);flex-shrink:0}
+.pai-name{font-size:16px;font-weight:600}
+.pai-sub{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.pai-info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border-light);font-size:13px;gap:8px}
+.pai-info-row:last-child{border-bottom:none}
+.pai-label{color:var(--text-secondary);flex-shrink:0}
+.pai-value{font-weight:500;text-align:right}
+.status-big{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600}
+.status-big.present{background:var(--green-pale);color:var(--green-text)}
+.status-big.absent{background:var(--red-pale);color:var(--red-text)}
+.status-big.pending{background:var(--gray-pale);color:var(--gray-text)}
+
+@media(max-width:520px){
+  .table-header,.table-row{grid-template-columns:1fr 70px 80px 70px;padding:10px 10px;gap:6px}
+  .line-grid{grid-template-columns:1fr 1fr}
+  .bus-grid{grid-template-columns:1fr 1fr}
+}
+</style>
 </head>
 <body>
-  <h1>Criançada de Ibirama</h1>
-  <p>É os guri do NEPE</p>
+<div class="app" id="app"></div>
+<script>
+const DATA = {
+  linhas:[
+    {id:1,num:"01",nome:"Bairro Norte",onibus:[
+      {id:101,placa:"BUS-101",motorista:"Carlos Silva"},
+      {id:102,placa:"BUS-102",motorista:"Ana Lima"}
+    ]},
+    {id:2,num:"02",nome:"Zona Sul",onibus:[
+      {id:201,placa:"BUS-201",motorista:"Pedro Souza"}
+    ]},
+    {id:3,num:"03",nome:"Centro",onibus:[
+      {id:301,placa:"BUS-301",motorista:"Maria Costa"},
+      {id:302,placa:"BUS-302",motorista:"João Melo"}
+    ]}
+  ],
+  criancas:[
+    {id:1,nome:"Lucas Pereira",onibusId:101,pontoEmbarque:"Rua das Flores, 12",descidaLinha:"Escola Central",status:"pending"},
+    {id:2,nome:"Sofia Almeida",onibusId:101,pontoEmbarque:"Av. Brasil, 45",descidaLinha:"Escola Central",status:"pending"},
+    {id:3,nome:"Miguel Santos",onibusId:101,pontoEmbarque:"Rua XV, 88",descidaLinha:"Escola Norte",status:"pending"},
+    {id:4,nome:"Isabela Rocha",onibusId:101,pontoEmbarque:"Praça da Paz",descidaLinha:"Escola Central",status:"pending"},
+    {id:5,nome:"Enzo Carvalho",onibusId:102,pontoEmbarque:"Rua Ipê, 7",descidaLinha:"Escola Norte",status:"pending"},
+    {id:6,nome:"Valentina Cruz",onibusId:102,pontoEmbarque:"Av. Atlântica, 200",descidaLinha:"Escola Central",status:"pending"},
+    {id:7,nome:"Davi Ferreira",onibusId:201,pontoEmbarque:"Rua Sul, 33",descidaLinha:"Escola Sul",status:"pending"},
+    {id:8,nome:"Heloísa Lima",onibusId:201,pontoEmbarque:"Av. Integração",descidaLinha:"Escola Sul",status:"pending"},
+    {id:9,nome:"Gabriel Nunes",onibusId:301,pontoEmbarque:"Praça Central",descidaLinha:"Escola Centro",status:"pending"},
+    {id:10,nome:"Laura Oliveira",onibusId:302,pontoEmbarque:"Rua do Porto, 5",descidaLinha:"Escola Centro",status:"pending"}
+  ],
+  usuarios:[
+    {id:1,nome:"Monitora Patrícia",email:"monitora@escola.com",senha:"1234",tipo:"monitora"},
+    {id:2,nome:"Roberto Pereira",email:"pai@escola.com",senha:"1234",tipo:"pai",filhoId:1},
+    {id:3,nome:"Carla Almeida",email:"mae@escola.com",senha:"1234",tipo:"pai",filhoId:2}
+  ]
+};
+
+let state={
+  user:null,loginTipo:"monitora",loginError:"",
+  view:"linhas",selectedLinha:null,selectedOnibus:null,
+  criancas:DATA.criancas.map(c=>({...c}))
+};
+
+function getLinhaByOnibusId(id){for(let l of DATA.linhas)for(let o of l.onibus)if(o.id===id)return l;return null}
+function getOnibusById(id){for(let l of DATA.linhas)for(let o of l.onibus)if(o.id===id)return o;return null}
+function getCriancasByOnibus(id){return state.criancas.filter(c=>c.onibusId===id)}
+function getStats(arr){return{present:arr.filter(c=>c.status==="present").length,absent:arr.filter(c=>c.status==="absent").length,pending:arr.filter(c=>c.status==="pending").length}}
+
+function render(){
+  const app=document.getElementById("app");
+  if(!state.user){renderLogin(app);return}
+  if(state.user.tipo==="pai"){renderPai(app);return}
+  renderMonitora(app);
+}
+
+function renderLogin(app){
+  app.innerHTML=`
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-icon"><i class="ti ti-bus"></i></div>
+        <div>
+          <div class="logo-text">TransEscolar</div>
+          <div class="logo-sub">Prefeitura de Ibiramã</div>
+        </div>
+      </div>
+      <div class="login-tabs">
+        <button class="tab-btn ${state.loginTipo==="monitora"?"active":""}" onclick="setTipo('monitora')">Monitora</button>
+        <button class="tab-btn ${state.loginTipo==="pai"?"active":""}" onclick="setTipo('pai')">Pai / Mãe</button>
+      </div>
+      ${state.loginError?`<div class="error-msg">${state.loginError}</div>`:""}
+      <div class="field"><label>E-mail</label><input type="email" id="inp-email" placeholder="${state.loginTipo==="monitora"?"monitora@escola.com":"pai@escola.com"}" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <div class="field"><label>Senha</label><input type="password" id="inp-senha" placeholder="••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <button class="btn-primary" onclick="doLogin()">Entrar</button>
+      <div class="hint">
+        <strong>Demonstração:</strong><br>
+        Monitora: monitora@escola.com / 1234<br>
+        Pai: pai@escola.com / 1234<br>
+        Mãe: mae@escola.com / 1234
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderMonitora(app){
+  let body="";
+  if(state.view==="linhas"){
+    const cards=DATA.linhas.map(l=>{
+      const total=state.criancas.filter(c=>{const li=getLinhaByOnibusId(c.onibusId);return li&&li.id===l.id}).length;
+      return`<div class="line-card" onclick="selLinha(${l.id})">
+        <div class="line-num">Linha ${l.num}</div>
+        <div class="line-name">${l.nome}</div>
+        <div class="line-meta">${l.onibus.length} ônibus · ${total} alunos</div>
+      </div>`;
+    }).join("");
+    body=`<div class="section-title">Linhas disponíveis</div><div class="line-grid">${cards}</div>`;
+  } else if(state.view==="onibus"){
+    const linha=DATA.linhas.find(l=>l.id===state.selectedLinha);
+    const busCards=linha.onibus.map(o=>{
+      const kids=getCriancasByOnibus(o.id);
+      return`<div class="bus-card ${state.selectedOnibus===o.id?"selected":""}" onclick="selOnibus(${o.id})">
+        <i class="ti ti-bus bus-icon"></i>
+        <div><div class="bus-num">${o.placa}</div><div class="bus-info">${kids.length} aluno${kids.length!==1?"s":""}</div></div>
+      </div>`;
+    }).join("");
+    body=`
+    <button class="btn-back" onclick="goBack()"><i class="ti ti-arrow-left"></i> Voltar para linhas</button>
+    <div class="section-title">Linha ${linha.num} — ${linha.nome}</div>
+    <div class="bus-grid">${busCards}</div>`;
+    if(state.selectedOnibus){
+      const onibus=getOnibusById(state.selectedOnibus);
+      const kids=getCriancasByOnibus(state.selectedOnibus);
+      const s=getStats(kids);
+      body+=`
+      <div class="chamada-bar">
+        <div class="section-title" style="margin:0">Chamada — ${onibus.placa}</div>
+        <div class="chamada-stats">
+          <span class="stat-chip stat-present"><i class="ti ti-check"></i> ${s.present} embarcou${s.present!==1?"m":""}</span>
+          <span class="stat-chip stat-absent"><i class="ti ti-x"></i> ${s.absent} ausente${s.absent!==1?"s":""}</span>
+          <span class="stat-chip stat-pending"><i class="ti ti-clock"></i> ${s.pending} pendente${s.pending!==1?"s":""}</span>
+        </div>
+      </div>
+      <div class="children-table">
+        <div class="table-header"><span>Aluno(a)</span><span>Ponto embarque</span><span>Desce em</span><span>Chamada</span></div>
+        ${kids.map(c=>`
+        <div class="table-row">
+          <div class="child-name">${c.nome}</div>
+          <div class="child-stop">${c.pontoEmbarque}</div>
+          <div><span class="descida-pill">${c.descidaLinha}</span></div>
+          <div class="status-btns">
+            <button class="status-btn ${c.status==="present"?"active-present":""}" onclick="setStatus(${c.id},'present')" title="Embarcou"><i class="ti ti-check"></i></button>
+            <button class="status-btn ${c.status==="absent"?"active-absent":""}" onclick="setStatus(${c.id},'absent')" title="Não embarcou"><i class="ti ti-x"></i></button>
+          </div>
+        </div>`).join("")}
+      </div>`;
+    }
+  }
+  app.innerHTML=`
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-icon"><i class="ti ti-bus"></i></div>
+      <div><div class="topbar-title">TransEscolar</div><div class="topbar-sub">Ibiramã</div></div>
+    </div>
+    <div class="user-badge">
+      <span class="role-pill role-monitora">Monitora</span>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+  </div>
+  <div class="content">${body}</div>`;
+}
+
+function renderPai(app){
+  const filho=state.criancas.find(c=>c.id===state.user.filhoId);
+  if(!filho){app.innerHTML=`<div style="text-align:center;padding:3rem;color:var(--text-secondary)">Nenhum filho cadastrado.</div>`;return}
+  const onibus=getOnibusById(filho.onibusId);
+  const linha=getLinhaByOnibusId(filho.onibusId);
+  const initials=filho.nome.split(" ").slice(0,2).map(n=>n[0]).join("");
+  const statusMap={present:["Embarcou","present","ti-circle-check"],absent:["Não embarcou","absent","ti-circle-x"],pending:["Aguardando chamada","pending","ti-clock"]};
+  const [label,cls,icon]=statusMap[filho.status];
+  app.innerHTML=`
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-icon"><i class="ti ti-bus"></i></div>
+      <div><div class="topbar-title">TransEscolar</div><div class="topbar-sub">Ibiramã</div></div>
+    </div>
+    <div class="user-badge">
+      <span class="role-pill role-pai">Responsável</span>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="section-title">Acompanhamento do aluno</div>
+    <div class="pai-card">
+      <div class="pai-header">
+        <div class="avatar">${initials}</div>
+        <div>
+          <div class="pai-name">${filho.nome}</div>
+          <div class="pai-sub">Transporte escolar municipal</div>
+        </div>
+      </div>
+      <div class="pai-info-row"><span class="pai-label">Linha</span><span class="pai-value">Linha ${linha.num} — ${linha.nome}</span></div>
+      <div class="pai-info-row"><span class="pai-label">Ônibus</span><span class="pai-value">${onibus.placa}</span></div>
+      <div class="pai-info-row"><span class="pai-label">Ponto de embarque</span><span class="pai-value">${filho.pontoEmbarque}</span></div>
+      <div class="pai-info-row"><span class="pai-label">Desce em</span><span class="pai-value">${filho.descidaLinha}</span></div>
+      <div class="pai-info-row">
+        <span class="pai-label">Status hoje</span>
+        <span class="status-big ${cls}"><i class="ti ${icon}"></i> ${label}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function setTipo(t){state.loginTipo=t;state.loginError="";render()}
+function doLogin(){
+  const email=document.getElementById("inp-email").value.trim();
+  const senha=document.getElementById("inp-senha").value;
+  const user=DATA.usuarios.find(u=>u.email===email&&u.senha===senha&&u.tipo===state.loginTipo);
+  if(!user){state.loginError="E-mail ou senha incorretos.";render();return}
+  state.user=user;state.loginError="";state.view="linhas";render();
+}
+function logout(){state.user=null;state.loginError="";render()}
+function selLinha(id){state.selectedLinha=id;state.selectedOnibus=null;state.view="onibus";render()}
+function selOnibus(id){state.selectedOnibus=state.selectedOnibus===id?null:id;render()}
+function goBack(){state.view="linhas";state.selectedLinha=null;state.selectedOnibus=null;render()}
+function setStatus(id,status){
+  const c=state.criancas.find(c=>c.id===id);
+  if(c)c.status=c.status===status?"pending":status;
+  render();
+}
+render();
+</script>
 </body>
 </html>
